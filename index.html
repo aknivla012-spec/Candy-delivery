@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CandyDrop Kenya</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff8f1;
+      color: #222;
+    }
+
+    header {
+      background: #ff5c8a;
+      color: white;
+      padding: 25px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .notice,
+    .cart {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .emoji {
+      font-size: 50px;
+    }
+
+    .card h3 {
+      margin: 10px 0;
+    }
+
+    .price {
+      color: #e83e72;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .qty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      background: #ff5c8a;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button.secondary {
+      background: #eeeeee;
+      color: #333;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      margin: 7px 0 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .total {
+      font-size: 23px;
+      font-weight: bold;
+      margin: 18px 0;
+      color: #e83e72;
+    }
+
+    .cart-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .success {
+      background: #eafff0;
+      border: 1px solid #9be0b2;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 15px;
+    }
+
+    .empty {
+      color: #777;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🍭 CandyDrop Kenya</h1>
+    <p>Sweet treats delivered to your door</p>
+  </header>
+
+  <div class="container">
+
+    <div class="notice">
+      <strong>Welcome!</strong>
+      Choose your favourite treats, add them to your cart,
+      and place your order.
+    </div>
+
+    <h2>🍬 Our Products</h2>
+
+    <div class="grid" id="products"></div>
+
+    <div class="cart">
+
+      <h2>🛒 Your Order</h2>
+
+      <div id="cartItems">
+        <p class="empty">Your cart is empty.</p>
+      </div>
+
+      <div class="total">
+        Total: KSh <span id="total">0</span>
+      </div>
+
+      <h3>📍 Delivery Details</h3>
+
+      <label>Your Name</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="Enter your name"
+      >
+
+      <label>Phone Number</label>
+      <input
+        type="tel"
+        id="phone"
+        placeholder="e.g. 0712345678"
+      >
+
+      <label>Delivery Location</label>
+      <textarea
+        id="location"
+        rows="3"
+        placeholder="Enter your location and directions"
+      ></textarea>
+
+      <button onclick="placeOrder()">
+        Place Order
+      </button>
+
+      <div id="result" style="display:none;"></div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    CandyDrop Kenya © 2026
+  </footer>
+
+
+<script>
+
+  /*
+    PRODUCT LIST
+    You can change the names and prices here.
+  */
+
+  const products = [
+    {
+      name: "Candy Mix",
+      price: 70,
+      emoji: "🍬"
+    },
+
+    {
+      name: "Gummy Sweets",
+      price: 70,
+      emoji: "🧸"
+    },
+
+    {
+      name: "Lollipop",
+      price: 70,
+      emoji: "🍭"
+    },
+
+    {
+      name: "Chocolate Treat",
+      price: 70,
+      emoji: "🍫"
+    },
+
+    {
+      name: "Cookies",
+      price: 70,
+      emoji: "🍪"
+    },
+
+    {
+      name: "Sour Candy",
+      price: 70,
+      emoji: "🍋"
+    }
+  ];
+
+
+  let cart = {};
+
+
+  /*
+    DISPLAY PRODUCTS
+  */
+
+  function renderProducts() {
+
+    const productsContainer =
+      document.getElementById("products");
+
+    productsContainer.innerHTML =
+      products.map((product, index) => {
+
+        return `
+
+          <div class="card">
+
+            <div class="emoji">
+              ${product.emoji}
+            </div>
+
+            <h3>
+              ${product.name}
+            </h3>
+
+            <div class="price">
+              KSh ${product.price}
+            </div>
+
+            <div class="qty">
+
+              <button
+                class="secondary"
+                onclick="changeQuantity(${index}, -1)"
+              >
+                −
+              </button>
+
+              <strong id="quantity-${index}">
+                0
+              </strong>
+
+              <button
+                onclick="changeQuantity(${index}, 1)"
+              >
+                +
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+  }
+
+
+  /*
+    CHANGE PRODUCT QUANTITY
+  */
+
+  function changeQuantity(index, amount) {
+
+    if (!cart[index]) {
+      cart[index] = 0;
+    }
+
+    cart[index] += amount;
+
+    if (cart[index] < 0) {
+      cart[index] = 0;
+    }
+
+    document.getElementById(
+      "quantity-" + index
+    ).textContent = cart[index];
+
+    renderCart();
+
+  }
+
+
+  /*
+    DISPLAY CART
+  */
+
+  function renderCart() {
+
+    const cartContainer =
+      document.getElementById("cartItems");
+
+    const totalElement =
+      document.getElementById("total");
+
+    let total = 0;
+
+    let selectedProducts =
+      Object.keys(cart).filter(
+        index => cart[index] > 0
+      );
+
+
+    if (selectedProducts.length === 0) {
+
+      cartContainer.innerHTML =
+        '<p class="empty">Your cart is empty.</p>';
+
+      totalElement.textContent = "0";
+
+      return;
+    }
+
+
+    cartContainer.innerHTML =
+      selectedProducts.map(index => {
+
+        const product =
+          products[index];
+
+        const quantity =
+          cart[index];
+
+        const subtotal =
+          product.price * quantity;
+
+        total += subtotal;
+
+        return `
+
+          <div class="cart-item">
+
+            <strong>
+              ${product.emoji}
+              ${product.name}
+            </strong>
+
+            × ${quantity}
+
+            — KSh ${subtotal}
+
+          </div>
+
+        `;
+
+      }).join("");
+
+
+    totalElement.textContent =
+      total;
+
+  }
+
+
+  /*
+    PLACE ORDER
+  */
+
+  function placeOrder() {
+
+    const name =
+      document.getElementById("name")
+      .value.trim();
+
+    const phone =
+      document.getElementById("phone")
+      .value.trim();
+
+    const location =
+      document.getElementById("location")
+      .value.trim();
+
+
+    const selectedProducts =
+      Object.keys(cart).filter(
+        index => cart[index] > 0
+      );
+
+
+    if (selectedProducts.length === 0) {
+
+      alert(
+        "Please add a product to your cart."
+      );
+
+      return;
+    }
+
+
+    if (!name || !phone || !location) {
+
+      alert(
+        "Please fill in your name, phone number and delivery location."
+      );
+
+      return;
+    }
+
+
+    const orderNumber =
+      "CD" +
+      Date.now()
+        .toString()
+        .slice(-7);
+
+
+    const total =
+      document.getElementById("total")
+      .textContent;
+
+
+    const result =
+      document.getElementById("result");
+
+
+    result.style.display = "block";
+
+    result.className = "success";
+
+
+    result.innerHTML = `
+
+      <h3>✅ Order Received!</h3>
+
+      <p>
+        Thank you, <strong>${name}</strong>.
+      </p>
+
+      <p>
+        Your order number is:
+        <strong>${orderNumber}</strong>
+      </p>
+
+      <p>
+        Amount:
+        <strong>KSh ${total}</strong>
+      </p>
+
+      <p>
+        Delivery location:
+        <strong>${location}</strong>
+      </p>
+
+      <p>
+        We will contact you on
+        <strong>${phone}</strong>
+        to confirm the order.
+      </p>
+
+      <p>
+        <strong>Note:</strong>
+        M-Pesa payment is not connected yet.
+        This version is a working demo.
+      </p>
+
+    `;
+
+  }
+
+
+  /*
+    START WEBSITE
+  */
+
+  renderProducts();
+
+  renderCart();
+
+</script>
+
+</body>
+</html>
