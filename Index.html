@@ -1,1493 +1,476 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="myHempire - order sweets and cookies online.">
-  <meta name="theme-color" content="#6d28d9">
-  <title>myHempire</title>
-
-  <style>
-    :root {
-      --purple: #6d28d9;
-      --purple-dark: #3b0764;
-      --orange: #f97316;
-      --green: #16a34a;
-      --ink: #171321;
-      --muted: #6b6475;
-      --card: #ffffff;
-      --line: #eadff3;
-      --danger: #b91c1c;
-      --shadow: 0 12px 35px rgba(59, 7, 100, .12);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      color: var(--ink);
-
-      background:
-        radial-gradient(
-          circle at 10% 0%,
-          rgba(109, 40, 217, .16),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 95% 15%,
-          rgba(249, 115, 22, .14),
-          transparent 30%
-        ),
-        linear-gradient(
-          145deg,
-          #fbf8ff,
-          #fff9f3 55%,
-          #f4fff7
-        );
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      color: white;
-
-      background:
-        linear-gradient(
-          120deg,
-          var(--purple-dark),
-          var(--purple),
-          var(--orange),
-          var(--green)
-        );
-
-      background-size: 250% 250%;
-      animation: gradientMove 12s ease infinite;
-
-      box-shadow: 0 5px 22px rgba(0, 0, 0, .15);
-    }
-
-    @keyframes gradientMove {
-      0%, 100% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-    }
-
-    .nav {
-      max-width: 1100px;
-      margin: auto;
-      padding: 15px 18px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .brand {
-      font-size: 1.55rem;
-      font-weight: 900;
-      letter-spacing: .3px;
-    }
-
-    .tag {
-      font-size: .8rem;
-      opacity: .9;
-    }
-
-    .cart-btn {
-      border: 1px solid rgba(255, 255, 255, .35);
-      background: rgba(255, 255, 255, .16);
-      color: white;
-
-      padding: 10px 15px;
-      border-radius: 999px;
-
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .hero {
-      max-width: 1100px;
-      margin: auto;
-      padding: 48px 18px 25px;
-
-      display: grid;
-      grid-template-columns: 1.35fr .65fr;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.1rem, 7vw, 4.3rem);
-      line-height: .98;
-      margin: 0 0 14px;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 620px;
-    }
-
-    .hero-card {
-      padding: 25px;
-      border-radius: 28px;
-      color: white;
-
-      background:
-        linear-gradient(
-          145deg,
-          var(--purple),
-          var(--orange) 70%,
-          var(--green)
-        );
-
-      box-shadow: var(--shadow);
-    }
-
-    main {
-      max-width: 1100px;
-      margin: auto;
-      padding: 15px 18px 70px;
-    }
-
-    .section-title {
-      margin: 25px 0 15px;
-    }
-
-    .section-title h2 {
-      margin: 0;
-      font-size: 1.65rem;
-    }
-
-    .section-title p {
-      margin: 5px 0;
-      color: var(--muted);
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .product {
-      background: rgba(255, 255, 255, .92);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 17px;
-      box-shadow: var(--shadow);
-    }
-
-    .product-art {
-      height: 145px;
-      border-radius: 17px;
-
-      display: grid;
-      place-items: center;
-
-      font-size: 3.5rem;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(109, 40, 217, .16),
-          rgba(249, 115, 22, .18),
-          rgba(22, 163, 74, .14)
-        );
-    }
-
-    .product h3 {
-      margin: 13px 0 5px;
-    }
-
-    .product p {
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
-    .price {
-      font-size: 1.2rem;
-      font-weight: 900;
-    }
-
-    .add {
-      width: 100%;
-      margin-top: 12px;
-      padding: 11px;
-
-      border: 0;
-      border-radius: 13px;
-
-      color: white;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--purple),
-          var(--orange),
-          var(--green)
-        );
-
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .add:active {
-      transform: scale(.98);
-    }
-
-    .panel {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 20px;
-      margin-top: 25px;
-      box-shadow: var(--shadow);
-    }
-
-    .cart-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-
-      padding: 11px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .qty {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .qty button {
-      width: 31px;
-      height: 31px;
-
-      border: 1px solid var(--line);
-      border-radius: 9px;
-
-      background: white;
-      cursor: pointer;
-      font-weight: 900;
-    }
-
-    .total {
-      display: flex;
-      justify-content: space-between;
-
-      font-size: 1.2rem;
-      font-weight: 900;
-
-      padding-top: 16px;
-    }
-
-    form {
-      display: grid;
-      gap: 12px;
-    }
-
-    label {
-      font-size: .85rem;
-      font-weight: 800;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 12px 13px;
-
-      border: 1px solid #d9cce3;
-      border-radius: 12px;
-
-      font: inherit;
-      background: white;
-      outline: none;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px rgba(109, 40, 217, .1);
-    }
-
-    textarea {
-      min-height: 85px;
-      resize: vertical;
-    }
-
-    .primary {
-      padding: 13px 16px;
-
-      border: 0;
-      border-radius: 13px;
-
-      color: white;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--purple),
-          var(--orange),
-          var(--green)
-        );
-
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .payment {
-      display: none;
-
-      margin-top: 18px;
-
-      border: 1px solid #e5d6f3;
-      border-radius: 18px;
-
-      padding: 17px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #fcf8ff,
-          #fff8f0
-        );
-    }
-
-    .payment.show {
-      display: block;
-    }
-
-    .wallet {
-      background: #18121f;
-      color: white;
-
-      border-radius: 14px;
-      padding: 13px;
-
-      word-break: break-all;
-
-      font-family: monospace;
-      font-size: .85rem;
-    }
-
-    .qr {
-      width: 210px;
-      height: 210px;
-
-      display: block;
-      margin: 14px auto;
-
-      border-radius: 10px;
-      border: 8px solid white;
-
-      box-shadow: 0 4px 18px rgba(0, 0, 0, .14);
-    }
-
-    .notice {
-      padding: 11px 13px;
-      border-radius: 12px;
-      margin: 10px 0;
-      font-size: .9rem;
-    }
-
-    .notice.info {
-      background: #f2eaff;
-      color: #4c1d95;
-    }
-
-    .notice.warn {
-      background: #fff4e8;
-      color: #9a3412;
-    }
-
-    .notice.success {
-      background: #ecfdf3;
-      color: #166534;
-    }
-
-    .status {
-      display: inline-block;
-
-      padding: 6px 9px;
-      border-radius: 999px;
-
-      background: #fff4e8;
-      color: #9a3412;
-
-      font-size: .78rem;
-      font-weight: 900;
-    }
-
-    .small {
-      font-size: .78rem;
-      color: var(--muted);
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px 18px;
-      color: var(--muted);
-      font-size: .82rem;
-    }
-
-    @media (max-width: 780px) {
-      .hero {
-        grid-template-columns: 1fr;
-        padding-top: 32px;
-      }
-
-      .products {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 520px) {
-      .products {
-        grid-template-columns: 1fr;
-      }
-
-      .nav {
-        padding: 12px;
-      }
-
-      .hero {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-
-      main {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#6d28d9">
+<meta name="description" content="myHempire — sweets, treats and delivery.">
+<title>myHempire | Sweetness Delivered</title>
+
+<style>
+:root {
+  --purple:#6d28d9;
+  --dark:#3b0764;
+  --orange:#f97316;
+  --green:#16a34a;
+  --ink:#21152b;
+  --muted:#746a7d;
+  --line:#eadff3;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 0%,#eadcff,transparent 32%),
+    radial-gradient(circle at 95% 12%,#ffeadb,transparent 30%),
+    linear-gradient(145deg,#fbf8ff,#fff9f3 60%,#f4fff7);
+}
+header {
+  position:sticky;top:0;z-index:5;color:white;
+  background:linear-gradient(115deg,var(--dark),var(--purple),var(--orange),var(--green));
+  box-shadow:0 5px 22px #32104425;
+}
+.nav {
+  max-width:1100px;margin:auto;padding:15px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand { font-size:1.6rem;font-weight:950; }
+.tag { font-size:.8rem;opacity:.9; }
+button { cursor:pointer;font:inherit; }
+.cart-btn {
+  padding:10px 15px;border-radius:99px;
+  border:1px solid #ffffff70;background:#ffffff20;color:white;font-weight:800;
+}
+.hero {
+  max-width:1100px;margin:auto;padding:44px 18px 22px;
+  display:grid;grid-template-columns:1.3fr .7fr;gap:22px;align-items:center;
+}
+.hero h1 { font-size:clamp(2.5rem,8vw,4.5rem);line-height:1;margin:0 0 15px; }
+.hero p { color:var(--muted);line-height:1.6; }
+.hero-card {
+  padding:25px;border-radius:25px;color:white;
+  background:linear-gradient(140deg,var(--purple),var(--orange) 70%,var(--green));
+  box-shadow:0 12px 35px #3b076420;
+}
+.hero-card p { color:white;margin-bottom:0; }
+main { max-width:1100px;margin:auto;padding:12px 18px 65px; }
+.section-title { margin:24px 0 15px; }
+.section-title h2 { margin:0;font-size:1.55rem; }
+.section-title p { margin:5px 0;color:var(--muted); }
+.products { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px; }
+.product,.panel {
+  background:#ffffffed;border:1px solid var(--line);
+  border-radius:22px;padding:17px;box-shadow:0 10px 30px #3b076410;
+}
+.product-art {
+  height:145px;border-radius:17px;display:grid;place-items:center;font-size:3.5rem;
+  background:linear-gradient(135deg,#6d28d925,#f973162b,#16a34a20);
+}
+.product h3 { margin:13px 0 5px; }
+.product p { margin:0 0 12px;color:var(--muted);font-size:.9rem; }
+.price { font-size:1.2rem;font-weight:900; }
+.add,.primary {
+  border:0;border-radius:13px;color:white;font-weight:850;
+  background:linear-gradient(90deg,var(--purple),var(--orange),var(--green));
+  padding:12px 15px;
+}
+.add { width:100%;margin-top:12px; }
+.panel { margin-top:25px;padding:20px; }
+.cart-row {
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:12px 0;border-bottom:1px solid #eee;
+}
+.qty { display:flex;align-items:center;gap:8px; }
+.qty button {
+  width:32px;height:32px;border:1px solid var(--line);
+  background:white;border-radius:9px;font-weight:900;
+}
+.total {
+  display:flex;justify-content:space-between;padding-top:17px;
+  font-weight:900;font-size:1.2rem;
+}
+form { display:grid;gap:12px; }
+label { display:block;font-size:.88rem;font-weight:800;margin-bottom:6px; }
+input,textarea,select {
+  width:100%;padding:12px;border:1px solid #d9cce3;
+  border-radius:12px;font:inherit;background:white;
+}
+textarea { min-height:85px;resize:vertical; }
+input:focus,textarea:focus,select:focus {
+  outline:2px solid #6d28d930;border-color:var(--purple);
+}
+.payment {
+  display:none;margin-top:20px;padding:17px;border:1px solid var(--line);
+  border-radius:18px;background:linear-gradient(145deg,#fcf8ff,#fff8f0);
+}
+.payment.show { display:block; }
+.notice { padding:12px;border-radius:12px;margin:12px 0;font-size:.9rem;line-height:1.5; }
+.info { background:#f2eaff;color:#4c1d95; }
+.warn { background:#fff4e8;color:#9a3412; }
+.success { background:#ecfdf3;color:#166534; }
+.status {
+  display:inline-block;padding:6px 10px;border-radius:99px;
+  background:#fff4e8;color:#9a3412;font-size:.78rem;font-weight:900;
+}
+.wallet {
+  background:#18121f;color:white;border-radius:12px;padding:13px;
+  word-break:break-all;font: .85rem monospace;
+}
+.qr {
+  width:210px;height:210px;display:block;margin:15px auto;
+  border:7px solid white;border-radius:10px;
+}
+.small { font-size:.8rem;color:var(--muted); }
+.hidden { display:none!important; }
+button:disabled { opacity:.5;cursor:not-allowed; }
+footer { text-align:center;padding:25px;color:var(--muted);font-size:.82rem; }
+@media(max-width:780px) {
+  .hero { grid-template-columns:1fr;padding-top:30px; }
+  .products { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:520px) {
+  .products { grid-template-columns:1fr; }
+  main { padding-left:12px;padding-right:12px; }
+  .nav { padding:12px; }
+}
+</style>
 </head>
 
 <body>
-
 <header>
   <div class="nav">
-
     <div>
       <div class="brand">myHempire</div>
-      <div class="tag">
-        Cookies • Sweets • Delivery
-      </div>
+      <div class="tag">Cookies • Sweets • Delivery</div>
     </div>
-
-    <button
-      class="cart-btn"
-      onclick="document.getElementById('cart').scrollIntoView({behavior:'smooth'})"
-    >
+    <button class="cart-btn" onclick="document.getElementById('cart').scrollIntoView({behavior:'smooth'})">
       Cart (<span id="cartCount">0</span>)
     </button>
-
   </div>
 </header>
 
-
 <section class="hero">
-
   <div>
-
-    <h1>
-      Sweetness delivered.
-    </h1>
-
-    <p>
-      Choose your favourites, place your order and pay securely before dispatch.
-    </p>
-
+    <h1>Sweetness delivered.</h1>
+    <p>Discover your favourite treats, build your cart and arrange delivery with myHempire.</p>
   </div>
-
-
   <div class="hero-card">
-
-    <strong>
-      myHempire checkout
-    </strong>
-
-    <p style="color:#fff;margin-bottom:0">
-
-      Payment must be confirmed before an order is dispatched for delivery.
-
-    </p>
-
+    <strong>Your next sweet fix.</strong>
+    <p>Choose your products, confirm your delivery details and follow the payment instructions.</p>
   </div>
-
 </section>
 
-
 <main>
-
-  <!-- PRODUCTS -->
-
   <section>
-
     <div class="section-title">
-
-      <h2>
-        Our products
-      </h2>
-
-      <p>
-        Select a product to add it to your cart.
-      </p>
-
+      <h2>Our products</h2>
+      <p>Choose your treats and add them to your cart.</p>
     </div>
-
-
-    <div
-      class="products"
-      id="products"
-    ></div>
-
+    <div class="products" id="products"></div>
   </section>
 
-
-  <!-- CART -->
-
-  <section
-    class="panel"
-    id="cart"
-  >
-
+  <section class="panel" id="cart">
     <div class="section-title">
-
-      <h2>
-        Your cart
-      </h2>
-
-      <p>
-        Review your items before checkout.
-      </p>
-
+      <h2>Your cart</h2>
+      <p>Check your products and quantities.</p>
     </div>
-
-
-    <div id="cartItems">
-
-      <p class="small">
-        Your cart is empty.
-      </p>
-
-    </div>
-
-
+    <div id="cartItems"><p class="small">Your cart is empty.</p></div>
     <div class="total">
-
-      <span>
-        Total
-      </span>
-
-      <span id="cartTotal">
-        KSh 0
-      </span>
-
+      <span>Total</span><span id="cartTotal">KSh 0</span>
     </div>
-
   </section>
-
-
-  <!-- DELIVERY / CHECKOUT -->
 
   <section class="panel">
-
     <div class="section-title">
-
-      <h2>
-        Delivery details
-      </h2>
-
-      <p>
-        Complete these details to create a payment request.
-      </p>
-
+      <h2>Delivery details</h2>
+      <p>Enter your details to create an order.</p>
     </div>
-
-
-    <form
-      id="checkoutForm"
-      autocomplete="on"
-    >
-
+    <form id="checkoutForm">
       <div>
-
-        <label for="name">
-          Full name
-        </label>
-
-        <input
-          id="name"
-          name="name"
-          maxlength="80"
-          required
-        >
-
+        <label for="name">Full name</label>
+        <input id="name" name="name" maxlength="80" required autocomplete="name">
       </div>
-
-
       <div>
-
-        <label for="phone">
-          Phone number
-        </label>
-
-        <input
-          id="phone"
-          name="phone"
-          inputmode="tel"
-          maxlength="20"
-          required
-        >
-
+        <label for="phone">Phone number</label>
+        <input id="phone" name="phone" type="tel" maxlength="20" required autocomplete="tel">
       </div>
-
-
       <div>
-
-        <label for="location">
-          Delivery location
-        </label>
-
-        <textarea
-          id="location"
-          name="location"
-          maxlength="300"
-          required
-        ></textarea>
-
+        <label for="location">Delivery location and directions</label>
+        <textarea id="location" name="location" maxlength="300" required></textarea>
       </div>
-
-
-      <button
-        class="primary"
-        type="submit"
-      >
-        Continue to crypto payment
-      </button>
-
+      <button class="primary" type="submit">Create order</button>
     </form>
 
-
-    <!-- PAYMENT -->
-
-    <div
-      id="paymentBox"
-      class="payment"
-    >
-
-      <h3>
-        Crypto payment
-      </h3>
-
-
-      <span class="status">
-        PAYMENT PENDING
-      </span>
-
+    <div id="paymentBox" class="payment">
+      <h3>Payment instructions</h3>
+      <span class="status">PAYMENT PENDING VERIFICATION</span>
 
       <div class="notice info">
-
-        Send the exact order total to the wallet shown below.
-
-        Your order remains pending until payment is verified.
-
+        This is a front-end prototype. It does not generate a live exchange quote, receive payment notifications or independently verify blockchain transactions. Do not send cryptocurrency based only on this page.
       </div>
 
+      <div id="orderSummary" class="notice info" aria-live="polite"></div>
 
-      <label for="network">
-        Payment network
-      </label>
-
-
-      <select
-        id="network"
-        onchange="updateWallet()"
-      >
-
-        <option value="USDT-TRC20">
-          USDT — TRC20
-        </option>
-
-        <option value="USDT-ERC20">
-          USDT — ERC20
-        </option>
-
-        <option value="USDT-POLYGON">
-          USDT — Polygon
-        </option>
-
-        <option value="BTC">
-          Bitcoin (BTC)
-        </option>
-
+      <label for="network">Crypto network</label>
+      <select id="network">
+        <option value="USDT-TRC20">USDT — TRC20</option>
+        <option value="USDT-ERC20">USDT — ERC20</option>
+        <option value="USDT-POLYGON">USDT — Polygon</option>
+        <option value="BTC">Bitcoin (BTC)</option>
       </select>
 
-
-      <p>
-        <strong>
-          Wallet address
-        </strong>
-      </p>
-
-
-      <div
-        class="wallet"
-        id="walletAddress"
-      >
-        ADD_YOUR_WALLET_ADDRESS_HERE
+      <p><strong>Receiving wallet address</strong></p>
+      <div class="wallet" id="walletAddress">Wallet address not configured</div>
+      <div id="walletWarning" class="notice warn">
+        No payment address is configured. Do not send funds.
       </div>
+      <img id="qrCode" class="qr hidden" alt="Receiving wallet QR code">
 
-
-      <img
-        id="qrCode"
-        class="qr"
-        alt="Crypto wallet QR code"
-      >
-
-
-      <button
-        class="primary"
-        type="button"
-        onclick="copyWallet()"
-      >
-        Copy wallet address
-      </button>
-
+      <button id="copyWalletButton" class="primary" type="button" disabled>Copy wallet address</button>
 
       <div class="notice warn">
-
-        Verify the network before sending.
-
-        A transfer sent on the wrong network may be unrecoverable.
-
+        A KSh total is not a crypto quote. Before accepting real payments, a trusted service must calculate the amount of crypto due and verify the transaction. Confirm the network carefully.
       </div>
-
-
-      <!-- TRANSACTION PROOF -->
 
       <form id="proofForm">
-
         <div>
-
-          <label for="txid">
-            Transaction ID / TX hash
-          </label>
-
-          <input
-            id="txid"
-            name="txid"
-            maxlength="150"
-            required
-            placeholder="Paste your transaction hash"
-          >
-
+          <label for="txid">Transaction ID / hash</label>
+          <input id="txid" name="txid" maxlength="150" required placeholder="Paste transaction hash" autocomplete="off">
         </div>
-
-
-        <button
-          class="primary"
-          type="submit"
-        >
-          Submit payment proof
-        </button>
-
+        <button id="proofSubmit" class="primary" type="submit" disabled>Submit transaction reference</button>
       </form>
 
-
-      <div
-        id="orderResult"
-        class="notice success hidden"
-      ></div>
-
-
+      <div id="orderResult" class="notice success hidden" aria-live="polite"></div>
       <p class="small">
-
-        Security note:
-
-        This GitHub Pages version does not expose M-Pesa credentials because
-        none are used.
-
-        A static website cannot independently verify blockchain payments or
-        securely authorize dispatch.
-
-        For production use, payment verification and dispatch authorization
-        should be moved to a server/backend.
-
+        Submitting a hash does not prove payment. This website never marks an order as paid or authorizes dispatch. A secure backend must verify the network, token, destination, amount and required confirmations. Dispatch must remain locked until that verification succeeds.
       </p>
-
     </div>
-
   </section>
-
 </main>
 
-
-<footer>
-
-  © <span id="year"></span> myHempire
-
-</footer>
-
+<footer>© <span id="year"></span> myHempire · Sweetness delivered.</footer>
 
 <script>
-
 "use strict";
 
-
-/*
-==========================================================
-PRODUCTS
-==========================================================
-
-The last three products have been changed to:
-
-Cloud 9s — KSh 70
-Cloud 9s — KSh 100
-Cloud 9s — KSh 140
-
-==========================================================
-*/
-
 const products = [
-
-  {
-    id: 1,
-    name: "Candy Mix",
-    price: 70,
-    icon: "🍬"
-  },
-
-  {
-    id: 2,
-    name: "Gummy Sweets",
-    price: 70,
-    icon: "🧸"
-  },
-
-  {
-    id: 3,
-    name: "Lollipop",
-    price: 70,
-    icon: "🍭"
-  },
-
-  {
-    id: 4,
-    name: "Cloud 9s",
-    price: 70,
-    icon: "☁️"
-  },
-
-  {
-    id: 5,
-    name: "Cloud 9s",
-    price: 100,
-    icon: "☁️"
-  },
-
-  {
-    id: 6,
-    name: "Cloud 9s",
-    price: 140,
-    icon: "☁️"
-  }
-
+  {id:1,name:"Candy Mix",price:70,icon:"🍬"},
+  {id:2,name:"Gummy Sweets",price:70,icon:"🧸"},
+  {id:3,name:"Lollipop",price:70,icon:"🍭"},
+  {id:4,name:"Cloud 9s",price:70,icon:"☁️"},
+  {id:5,name:"Cloud 9s",price:100,icon:"☁️"},
+  {id:6,name:"Cloud 9s",price:140,icon:"☁️"}
 ];
 
-
 /*
-==========================================================
-CRYPTO WALLET ADDRESSES
-==========================================================
-
-IMPORTANT:
-
-Replace the placeholder addresses below with your PUBLIC
-receiving wallet addresses.
-
-NEVER put:
-
-- seed phrases
-- private keys
-- exchange passwords
-- recovery phrases
-
-inside this HTML file.
-
-==========================================================
+  SETUP:
+  Replace each placeholder with your own PUBLIC receiving address.
+  Never add a seed phrase or private key to this HTML file.
+  Ensure each address supports the selected network and asset.
 */
-
 const walletAddresses = {
-
-  "USDT-TRC20":
-    "ADD_YOUR_USDT_TRC20_WALLET_ADDRESS_HERE",
-
-  "USDT-ERC20":
-    "ADD_YOUR_USDT_ERC20_WALLET_ADDRESS_HERE",
-
-  "USDT-POLYGON":
-    "ADD_YOUR_USDT_POLYGON_WALLET_ADDRESS_HERE",
-
-  "BTC":
-    "ADD_YOUR_BTC_WALLET_ADDRESS_HERE"
-
+  "USDT-TRC20":"ADD_YOUR_USDT_TRC20_WALLET_ADDRESS_HERE",
+  "USDT-ERC20":"ADD_YOUR_USDT_ERC20_WALLET_ADDRESS_HERE",
+  "USDT-POLYGON":"ADD_YOUR_USDT_POLYGON_WALLET_ADDRESS_HERE",
+  "BTC":"ADD_YOUR_BTC_WALLET_ADDRESS_HERE"
 };
 
-
-let cart = JSON.parse(
-  localStorage.getItem("myHempireCart") || "{}"
-);
-
-
-/*
-==========================================================
-MONEY FORMAT
-==========================================================
-*/
+let cart = {};
+try {
+  const saved = JSON.parse(localStorage.getItem("myHempireCart") || "{}");
+  if(saved && typeof saved === "object" && !Array.isArray(saved)) cart = saved;
+} catch(error) {
+  cart = {};
+}
+let currentOrder = null;
 
 function money(value) {
-
-  return "KSh " +
-    Number(value).toLocaleString("en-KE");
-
+  return "KSh " + Number(value).toLocaleString("en-KE");
 }
-
-
-/*
-==========================================================
-DISPLAY PRODUCTS
-==========================================================
-*/
-
-function renderProducts() {
-
-  const el =
-    document.getElementById("products");
-
-
-  el.innerHTML = products.map(p => `
-
-    <article class="product">
-
-      <div
-        class="product-art"
-        aria-hidden="true"
-      >
-        ${p.icon}
-      </div>
-
-
-      <h3>
-        ${escapeHtml(p.name)}
-      </h3>
-
-
-      <p>
-
-        ${
-          p.name === "Cloud 9s"
-            ? "Cloud 9s pack"
-            : "Sweet treat"
-        }
-
-      </p>
-
-
-      <div class="price">
-
-        ${money(p.price)}
-
-      </div>
-
-
-      <button
-        class="add"
-        onclick="addToCart(${p.id})"
-      >
-
-        Add to cart
-
-      </button>
-
-    </article>
-
-  `).join("");
-
-}
-
-
-/*
-==========================================================
-ADD TO CART
-==========================================================
-*/
-
-function addToCart(id) {
-
-  cart[id] =
-    (cart[id] || 0) + 1;
-
-  saveCart();
-
-  renderCart();
-
-}
-
-
-/*
-==========================================================
-CHANGE QUANTITY
-==========================================================
-*/
-
-function changeQty(id, delta) {
-
-  cart[id] =
-    (cart[id] || 0) + delta;
-
-
-  if (cart[id] <= 0) {
-
-    delete cart[id];
-
-  }
-
-
-  saveCart();
-
-  renderCart();
-
-}
-
-
-/*
-==========================================================
-SAVE CART
-==========================================================
-*/
-
-function saveCart() {
-
-  localStorage.setItem(
-    "myHempireCart",
-    JSON.stringify(cart)
-  );
-
-}
-
-
-/*
-==========================================================
-DISPLAY CART
-==========================================================
-*/
-
-function renderCart() {
-
-  const entries =
-    Object.entries(cart);
-
-
-  const items =
-    document.getElementById("cartItems");
-
-
-  if (!entries.length) {
-
-    items.innerHTML =
-      '<p class="small">Your cart is empty.</p>';
-
-  }
-
-  else {
-
-    items.innerHTML =
-      entries.map(([id, qty]) => {
-
-        const p =
-          products.find(
-            x => x.id === Number(id)
-          );
-
-
-        return `
-
-          <div class="cart-row">
-
-            <div>
-
-              <strong>
-                ${escapeHtml(p.name)}
-              </strong>
-
-              <br>
-
-              <span class="small">
-
-                ${money(p.price)} each
-
-              </span>
-
-            </div>
-
-
-            <div class="qty">
-
-              <button
-                type="button"
-                onclick="changeQty(${p.id},-1)"
-              >
-                −
-              </button>
-
-
-              <strong>
-                ${qty}
-              </strong>
-
-
-              <button
-                type="button"
-                onclick="changeQty(${p.id},1)"
-              >
-                +
-              </button>
-
-            </div>
-
-
-            <strong>
-
-              ${money(p.price * qty)}
-
-            </strong>
-
-          </div>
-
-        `;
-
-      }).join("");
-
-  }
-
-
-  const total =
-    getTotal();
-
-
-  const count =
-    entries.reduce(
-      (sum, [, qty]) =>
-        sum + qty,
-      0
-    );
-
-
-  document.getElementById(
-    "cartTotal"
-  ).textContent =
-    money(total);
-
-
-  document.getElementById(
-    "cartCount"
-  ).textContent =
-    count;
-
-}
-
-
-/*
-==========================================================
-CALCULATE TOTAL
-==========================================================
-*/
-
-function getTotal() {
-
-  return Object.entries(cart)
-    .reduce((sum, [id, qty]) => {
-
-      const p =
-        products.find(
-          x => x.id === Number(id)
-        );
-
-
-      return sum +
-        (p
-          ? p.price * qty
-          : 0);
-
-    }, 0);
-
-}
-
-
-/*
-==========================================================
-CRYPTO WALLET + QR CODE
-==========================================================
-*/
-
-function updateWallet() {
-
-  const network =
-    document.getElementById(
-      "network"
-    ).value;
-
-
-  const address =
-    walletAddresses[network];
-
-
-  document.getElementById(
-    "walletAddress"
-  ).textContent =
-    address;
-
-
-  /*
-  QR code contains the public wallet address.
-  */
-
-  const encoded =
-    encodeURIComponent(address);
-
-
-  document.getElementById(
-    "qrCode"
-  ).src =
-    "https://api.qrserver.com/v1/create-qr-code/" +
-    "?size=420x420&data=" +
-    encoded;
-
-}
-
-
-/*
-==========================================================
-COPY WALLET
-==========================================================
-*/
-
-async function copyWallet() {
-
-  const address =
-    document.getElementById(
-      "walletAddress"
-    ).textContent;
-
-
-  try {
-
-    await navigator.clipboard
-      .writeText(address);
-
-
-    alert(
-      "Wallet address copied."
-    );
-
-  }
-
-  catch (e) {
-
-    alert(
-      "Copy failed. Long-press the wallet address and copy it manually."
-    );
-
-  }
-
-}
-
-
-/*
-==========================================================
-CHECKOUT
-==========================================================
-*/
-
-document
-  .getElementById("checkoutForm")
-  .addEventListener(
-    "submit",
-    function(e) {
-
-      e.preventDefault();
-
-
-      if (getTotal() <= 0) {
-
-        alert(
-          "Add at least one product to your cart."
-        );
-
-
-        document
-          .getElementById("cart")
-          .scrollIntoView({
-            behavior: "smooth"
-          });
-
-
-        return;
-
-      }
-
-
-      document
-        .getElementById("paymentBox")
-        .classList.add("show");
-
-
-      updateWallet();
-
-
-      document
-        .getElementById("paymentBox")
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-    }
-  );
-
-
-/*
-==========================================================
-PAYMENT PROOF
-==========================================================
-*/
-
-document
-  .getElementById("proofForm")
-  .addEventListener(
-    "submit",
-    function(e) {
-
-      e.preventDefault();
-
-
-      const txid =
-        document
-          .getElementById("txid")
-          .value
-          .trim();
-
-
-      if (txid.length < 8) {
-
-        alert(
-          "Enter a valid transaction ID / TX hash."
-        );
-
-        return;
-
-      }
-
-
-      const orderNumber =
-        "MH-" +
-        Date.now()
-          .toString()
-          .slice(-8);
-
-
-      const result =
-        document.getElementById(
-          "orderResult"
-        );
-
-
-      result.classList.remove(
-        "hidden"
-      );
-
-
-      result.innerHTML =
-
-        "<strong>Order " +
-        orderNumber +
-        " received.</strong><br>" +
-
-        "Status: <strong>" +
-        "PAYMENT PENDING VERIFICATION" +
-        "</strong>.<br>" +
-
-        "Dispatch is locked until " +
-        "the payment is verified.";
-
-    }
-  );
-
-
-/*
-==========================================================
-HTML SECURITY
-==========================================================
-*/
-
 function escapeHtml(value) {
-
-  return String(value)
-    .replace(
-      /[&<>"']/g,
-      c => ({
-
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-
-      }[c])
-    );
-
+  return String(value).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+function getTotal() {
+  return Object.entries(cart).reduce((sum,[id,qty])=>{
+    const product=products.find(p=>p.id===Number(id));
+    const quantity=Math.max(0,Math.min(99,Number(qty)||0));
+    return sum+(product?product.price*quantity:0);
+  },0);
+}
+function saveCart() {
+  try { localStorage.setItem("myHempireCart",JSON.stringify(cart)); }
+  catch(error) { console.warn("Cart could not be saved on this device."); }
+}
+function renderProducts() {
+  document.getElementById("products").innerHTML=products.map(p=>`
+    <article class="product">
+      <div class="product-art" aria-hidden="true">${p.icon}</div>
+      <h3>${escapeHtml(p.name)}</h3>
+      <p>${p.name==="Cloud 9s"?"Cloud 9s pack":"Sweet treat"}</p>
+      <div class="price">${money(p.price)}</div>
+      <button class="add" type="button" onclick="addToCart(${p.id})">Add to cart</button>
+    </article>
+  `).join("");
+}
+function addToCart(id) {
+  cart[id]=Math.min(99,(Number(cart[id])||0)+1);
+  saveCart();
+  renderCart();
+}
+function changeQty(id,delta) {
+  const next=(Number(cart[id])||0)+delta;
+  if(next<=0) delete cart[id];
+  else cart[id]=Math.min(99,next);
+  saveCart();
+  renderCart();
+}
+function renderCart() {
+  const entries=Object.entries(cart).filter(([id,qty])=>
+    products.some(p=>p.id===Number(id)) && Number(qty)>0
+  );
+  const container=document.getElementById("cartItems");
+  if(!entries.length) {
+    container.innerHTML='<p class="small">Your cart is empty.</p>';
+  } else {
+    container.innerHTML=entries.map(([id,qty])=>{
+      const p=products.find(x=>x.id===Number(id));
+      qty=Math.min(99,Number(qty)||0);
+      return `<div class="cart-row">
+        <div><strong>${escapeHtml(p.name)}</strong><br>
+        <span class="small">${money(p.price)} each</span></div>
+        <div class="qty">
+          <button type="button" aria-label="Remove one ${escapeHtml(p.name)}" onclick="changeQty(${p.id},-1)">−</button>
+          <strong>${qty}</strong>
+          <button type="button" aria-label="Add one ${escapeHtml(p.name)}" onclick="changeQty(${p.id},1)">+</button>
+        </div>
+        <strong>${money(p.price*qty)}</strong>
+      </div>`;
+    }).join("");
+  }
+  document.getElementById("cartTotal").textContent=money(getTotal());
+  document.getElementById("cartCount").textContent=entries.reduce((s,[,q])=>s+Number(q),0);
+}
+function isConfiguredAddress(address) {
+  return typeof address==="string" && address.length>10 &&
+    !address.startsWith("ADD_YOUR_") &&
+    !address.includes("_WALLET_ADDRESS_HERE");
+}
+function updateWallet() {
+  const network=document.getElementById("network").value;
+  const address=walletAddresses[network]||"";
+  const configured=isConfiguredAddress(address);
+  document.getElementById("walletAddress").textContent=
+    configured?address:"Wallet address not configured";
+  document.getElementById("walletWarning").textContent=configured
+    ?"Address configured, but payment amount and transaction verification are not available in this prototype. Do not send funds until a trusted quote and secure backend are ready."
+    :"No receiving address is configured for this network. Do not send funds.";
+  const qr=document.getElementById("qrCode");
+  qr.classList.toggle("hidden",!configured);
+  if(configured) {
+    qr.src="https://api.qrserver.com/v1/create-qr-code/?size=420x420&data="+encodeURIComponent(address);
+  } else {
+    qr.removeAttribute("src");
+  }
+  document.getElementById("copyWalletButton").disabled=!configured;
+  document.getElementById("proofSubmit").disabled=!configured||!currentOrder;
+}
+async function copyWallet() {
+  const address=walletAddresses[document.getElementById("network").value];
+  if(!isConfiguredAddress(address)) {
+    alert("No receiving wallet address is configured.");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(address);
+    alert("Wallet address copied.");
+  } catch(error) {
+    alert("Copy unavailable. Select and copy the address manually.");
+  }
 }
 
+document.getElementById("copyWalletButton").addEventListener("click",copyWallet);
+document.getElementById("network").addEventListener("change",function() {
+  if(currentOrder) currentOrder.network=this.value;
+  updateWallet();
+});
 
-/*
-==========================================================
-START WEBSITE
-==========================================================
-*/
+document.getElementById("checkoutForm").addEventListener("submit",function(event) {
+  event.preventDefault();
+  if(getTotal()<=0) {
+    alert("Add at least one product to your cart first.");
+    document.getElementById("cart").scrollIntoView({behavior:"smooth"});
+    return;
+  }
 
-document.getElementById(
-  "year"
-).textContent =
-  new Date().getFullYear();
+  const name=document.getElementById("name").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+  const location=document.getElementById("location").value.trim();
+  if(!name||!phone||!location) {
+    alert("Please complete all delivery details.");
+    return;
+  }
 
+  const items=Object.entries(cart).map(([id,quantity])=>{
+    const p=products.find(x=>x.id===Number(id));
+    return p?{id:p.id,name:p.name,price:p.price,quantity:Number(quantity)}:null;
+  }).filter(Boolean);
 
+  const orderNumber="MH-"+Date.now().toString().slice(-8);
+  currentOrder={
+    orderNumber,name,phone,location,items,
+    totalKsh:getTotal(),
+    network:document.getElementById("network").value,
+    status:"PAYMENT PENDING VERIFICATION",
+    createdAt:new Date().toISOString()
+  };
+
+  document.getElementById("orderSummary").textContent=
+    "Order "+orderNumber+" | Total "+money(currentOrder.totalKsh)+
+    " | "+items.map(i=>i.name+" × "+i.quantity).join(", ")+
+    ". Status: PAYMENT PENDING VERIFICATION. No crypto quote has been generated.";
+
+  document.getElementById("orderResult").classList.add("hidden");
+  document.getElementById("txid").value="";
+  document.getElementById("paymentBox").classList.add("show");
+  updateWallet();
+  document.getElementById("paymentBox").scrollIntoView({behavior:"smooth"});
+});
+
+document.getElementById("proofForm").addEventListener("submit",function(event) {
+  event.preventDefault();
+  if(!currentOrder) {
+    alert("Create an order first.");
+    return;
+  }
+  const network=document.getElementById("network").value;
+  if(!isConfiguredAddress(walletAddresses[network])) {
+    alert("A receiving wallet address is not configured.");
+    return;
+  }
+  const txid=document.getElementById("txid").value.trim();
+  if(txid.length<8) {
+    alert("Enter a valid-looking transaction reference.");
+    return;
+  }
+
+  currentOrder.submittedTxHash=txid;
+  currentOrder.status="PAYMENT PENDING VERIFICATION";
+  document.getElementById("orderResult").textContent=
+    "Reference submitted for order "+currentOrder.orderNumber+
+    ". Status: PAYMENT PENDING VERIFICATION. This website has not verified the transaction. Do not dispatch this order.";
+  document.getElementById("orderResult").classList.remove("hidden");
+  document.getElementById("proofSubmit").disabled=true;
+});
+
+document.getElementById("year").textContent=new Date().getFullYear();
 renderProducts();
-
 renderCart();
-
 updateWallet();
-
 </script>
-
 </body>
 </html>
